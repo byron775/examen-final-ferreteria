@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import "./Reportes.css";
 import { generarExcel, generarPDF } from "../utils/exportar";
 import { getArticuloCategoria, getArticulosFiltro } from "../services/articuloService";
 import { getClienteFactura, getClienteFacturaDetalle } from "../services/clienteService";
@@ -74,37 +75,46 @@ export default function Reportes() {
       });
   };
 
-  const caja = { border: "1px solid #ccc", borderRadius: 8, padding: 16 };
-  const tarjeta = (titulo: string, pdf: () => void, excel: () => void) => (
-    <div style={caja}>
+  const tarjeta = (titulo: string, descripcion: string, pdf: () => void, excel: () => void) => (
+    <div className="tarjeta">
       <h3>{titulo}</h3>
-      <button onClick={pdf}>Exportar a PDF</button>{" "}
-      <button onClick={excel}>Exportar a Excel</button>
+      <p className="descripcion">{descripcion}</p>
+      <div className="botones">
+        <button className="btn btn-pdf" onClick={pdf}>📄 PDF</button>
+        <button className="btn btn-excel" onClick={excel}>📊 Excel</button>
+      </div>
     </div>
   );
 
   return (
-    <div style={{ padding: 24 }}>
-      <h1>Reportes - Ferretería</h1>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-        <div style={caja}>
+    <div className="contenedor">
+      <header className="encabezado">
+        <h1>🔧 Ferretería</h1>
+        <p>Reportes en PDF y Excel</p>
+      </header>
+
+      <div className="grid">
+        <div className="tarjeta">
           <h3>1. Artículos por nombre</h3>
-          <button onClick={() => dialogNombre.current?.showModal()}>Abrir filtro</button>
+          <p className="descripcion">Busca artículos activos por su nombre.</p>
+          <div className="botones">
+            <button className="btn btn-filtro" onClick={() => dialogNombre.current?.showModal()}>🔍 Abrir filtro</button>
+          </div>
         </div>
-        {tarjeta("2. Artículos con su categoría", artCatPDF, artCatExcel)}
-        {tarjeta("3. Facturas por cliente", facturasPDF, facturasExcel)}
-        {tarjeta("4. Detalle de facturas", detallePDF, detalleExcel)}
+        {tarjeta("2. Artículos con su categoría", "Artículo, marca, categoría, precio y stock.", artCatPDF, artCatExcel)}
+        {tarjeta("3. Facturas por cliente", "Cliente, NIT, fecha y total de cada factura.", facturasPDF, facturasExcel)}
+        {tarjeta("4. Detalle de facturas", "Artículos vendidos con su total general.", detallePDF, detalleExcel)}
       </div>
 
-      <dialog ref={dialogNombre}>
+      <dialog ref={dialogNombre} className="dialogo">
         <h3>Artículos por nombre</h3>
-        <input type="text" placeholder="Ej. tornillo" value={nombre}
+        <input className="campo" type="text" placeholder="Ej. tornillo" value={nombre}
           onChange={(e) => setNombre(e.target.value)} />
-        <p>
-          <button onClick={articulosPDF}>Exportar a PDF</button>{" "}
-          <button onClick={articulosExcel}>Exportar a Excel</button>{" "}
-          <button onClick={() => dialogNombre.current?.close()}>Cerrar</button>
-        </p>
+        <div className="botones">
+          <button className="btn btn-pdf" onClick={articulosPDF}>📄 Exportar a PDF</button>
+          <button className="btn btn-excel" onClick={articulosExcel}>📊 Exportar a Excel</button>
+          <button className="btn btn-cerrar" onClick={() => dialogNombre.current?.close()}>Cerrar</button>
+        </div>
       </dialog>
     </div>
   );
