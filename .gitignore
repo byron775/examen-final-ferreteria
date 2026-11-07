@@ -1,0 +1,5 @@
+﻿node_modules/
+target/
+.vscode/
+examen_backend/
+examen_backend.zip
